@@ -25,5 +25,14 @@ class Customer extends Model
     public function suspenses():HasMany{
         return $this->hasMany(Suspense::class);
     }
+
+    public function workshoporders(): HasMany
+    {
+        return $this->hasMany(Workshoporder::class, 'customer_id');
+    }
+    public function invoices(): HasMany
+    {
+        return $this->HasMany(Invoice::class, 'customer_id');
+    }
     
 }
