@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Issuerstoresrequisitionapproval extends Model
+class Adminstoresrequisitionapproval extends Model
 {
     public function storesrequisition():BelongsTo
     {
@@ -16,4 +16,3 @@ class Issuerstoresrequisitionapproval extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
- 

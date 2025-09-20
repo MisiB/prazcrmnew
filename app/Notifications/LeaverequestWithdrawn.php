@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class LeaverequestSubmitted extends Notification implements ShouldQueue
+class LeaverequestWithdrawn extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -40,6 +40,7 @@ class LeaverequestSubmitted extends Notification implements ShouldQueue
      */ 
     public function toMail($notifiable): MailMessage
     {
+        //approval url
         $leavetype=$this->leavetyperepo->getleavetype($this->leaverequest->leavetype_id);
         $leaveapprovalitemuuid=$this->leaverequestuuid;
         $leaveapproverid=$this->leaverequestapprovalrepo->getleaverequestapproval($this->leaverequestuuid)->user_id;
@@ -51,11 +52,11 @@ class LeaverequestSubmitted extends Notification implements ShouldQueue
         return (new MailMessage)
             ->success()
             ->greeting('Good day from PRAZ')
-            ->subject('RE: LEAVE REQUEST SUBMISSION')
+            ->subject('RE: LEAVE REQUEST WITHDRAWAL')
             ->line('')
-            ->line('A new '.$leavetype->name.' leave request has been submitted by '.$this->leaverequest->user->name.' '.$this->leaverequest->user->surname)
+            ->line('A '.$leavetype->name.' leave request has been withdrawn by '.$this->leaverequest->user->name.' '.$this->leaverequest->user->surname)
             ->line('')
-            ->action('Make decision', $finalizationurl)
+            ->action('View Details', $finalizationurl)
             ->line('')
             ->line('REF #:'.$this->leaverequest->leaverequestuuid)
             ->line('Thank you for using our application, we are here to serve!')
