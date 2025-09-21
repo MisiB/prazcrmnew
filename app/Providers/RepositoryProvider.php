@@ -43,6 +43,7 @@ use App\implementation\repositories\_wallettopupRepository;
 use App\implementation\repositories\_workflowRepository;
 use App\implementation\repositories\_workplanRepository;
 use App\implementation\repositories\_calenderRepository;
+use App\implementation\repositories\_workshopRepository;
 use App\implementation\repositories\_issuerstoresrequisitionapprovalRepository;
 use App\Interfaces\repositories\iaccountsettingInterface;
 use App\Interfaces\repositories\iaccounttypeInterface;
@@ -86,6 +87,7 @@ use App\Interfaces\repositories\iuserInterface;
 use App\Interfaces\repositories\iwallettopupInterface;
 use App\Interfaces\repositories\iworkflowInterface;
 use App\Interfaces\repositories\iworkplanInterface;
+use App\Interfaces\repositories\iworkshopInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryProvider extends ServiceProvider
@@ -145,5 +147,9 @@ class RepositoryProvider extends ServiceProvider
         $this->app->bind(ireceiverstoresrequisitionapprovalInterface::class, _receiverstoresrequisitionapprovalRepository::class);
         $this->app->bind(iadminstoresrequisitionapprovalInterface::class, _adminstoresrequisitionapprovalRepository::class);
         $this->app->bind(icalendarInterface::class, _calenderRepository::class);
+
+     //   $this->app->bind(ihodstoresrequisitionapprovalInterface::class, _hodstoresrequisitionapprovalRepository::class);
+        $this->app->bind(iworkshopInterface::class, _workshopRepository::class);
+
     }
 }

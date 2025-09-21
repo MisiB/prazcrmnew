@@ -73,6 +73,9 @@ Route::middleware('auth')->group(function () {
     Volt::route('/trackers/performancetracker', 'admin.trackers.performancetracker')->name('admin.trackers.performancetracker');
     Volt::route('/trackers/budgettracker', 'admin.trackers.budgettracker')->name('admin.trackers.budgettracker');
     Volt::route('/calendar', 'admin.weekday-calendar')->name('admin.calendar');
+    Volt::route('/workshopindex', 'admin.workshops.workshopindex')->name('admin.workshop.index');
+    Volt::route('/workshopindex/{id}', 'admin.workshops.workshopview')->name('admin.workshop.view');
+});
 });
 //Email Approval Flows
 Route::get('/approval/{leaveapprovalitemuuid}/{leaveapproverid}/{storesapprovalitemuuid}/{storesapproverid}/{status}', function($leaveapprovalitemuuid,$leaveapproverid,$storesapprovalitemuuid,$storesapproverid,$status){
