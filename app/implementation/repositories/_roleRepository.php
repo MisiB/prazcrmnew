@@ -33,6 +33,13 @@ class _roleRepository implements iroleRepository
             return null;
         }
     }
+    public function getusersbyrole($rolename){
+        try {
+            return $this->model->where('name', $rolename)->first()->users;
+        } catch (\Exception $e) {
+            return ["status" => "error", "message" => $e->getMessage()];
+        }
+    }
     public function createrole(array $role){
         try {
             return $this->model->create($role);

@@ -12,6 +12,7 @@ use App\implementation\services\_invoiceService;
 use App\implementation\services\_palladiumService;
 use App\implementation\services\_paynowService;
 use App\implementation\services\_exchangerateService;
+use App\implementation\services\_storesrequisitionService;
 use App\implementation\services\_suspenseService;
 use App\Interfaces\services\ibanktransactionInterface;
 use App\Interfaces\services\ICalendarService;
@@ -23,6 +24,7 @@ use App\Interfaces\services\iinventoryitemService;
 use App\Interfaces\services\iinvoiceService;
 use App\Interfaces\services\ipalladiumInterface;
 use App\Interfaces\services\ipaynowInterface;
+use App\Interfaces\services\istoresrequisitionService;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\services\isuspenseService;
 
@@ -52,5 +54,6 @@ class ApiProvider extends ServiceProvider
         $this->app->bind(iinvoiceService::class,_invoiceService::class);
         $this->app->bind(iexchangerateService::class,_exchangerateService::class);
         $this->app->bind(isuspenseService::class,_suspenseService::class);
+        $this->app->bind(istoresrequisitionService::class,_storesrequisitionService::class);
     }
 }

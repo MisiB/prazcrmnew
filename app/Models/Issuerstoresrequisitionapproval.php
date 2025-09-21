@@ -11,5 +11,9 @@ class Issuerstoresrequisitionapproval extends Model
     {
         return $this->belongsTo(Storesrequisition::class, 'storesrequisition_uuid', 'storesrequisition_uuid');
     }
+    public function user():BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
  
