@@ -25,7 +25,7 @@ class _userRepository implements iuserInterface
     {
         try {
             if ($search) {
-                return $this->model::where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%")->orWhere('phonenumber', 'like', "%{$search}%")->orWhere('country', 'like', "%{$search}%")->paginate(10);
+                return $this->model::where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%")->paginate(10);
             }
             return $this->model::paginate(10);
         } catch (\Exception $e) {

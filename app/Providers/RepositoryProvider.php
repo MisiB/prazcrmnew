@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\implementation\repositories\_receiverstoresrequisitionapprovalRepository;
 use App\implementation\repositories\_accountsettingRepository;
 use App\implementation\repositories\_accounttypeRepository;
+use App\implementation\repositories\_adminstoresrequisitionapprovalRepository;
 use App\implementation\repositories\_authRepository;
 use App\implementation\repositories\_bankaccountRepository;
 use App\implementation\repositories\_bankRepository;
@@ -29,7 +31,6 @@ use App\implementation\repositories\_permissionRepository;
 use App\implementation\repositories\_purchaserequisitionRepository;
 use App\implementation\repositories\_revenuepostingRepository;  
 use App\implementation\repositories\_roleRepository;
-use App\implementation\repositories\_storeitemRepository;
 use App\implementation\repositories\_storesrequisitionRepository;
 use App\implementation\repositories\_strategyRepository;
 use App\implementation\repositories\_submoduleRepository;
@@ -42,8 +43,11 @@ use App\implementation\repositories\_wallettopupRepository;
 use App\implementation\repositories\_workflowRepository;
 use App\implementation\repositories\_workplanRepository;
 use App\implementation\repositories\_calenderRepository;
+use App\implementation\repositories\_workshopRepository;
+use App\implementation\repositories\_issuerstoresrequisitionapprovalRepository;
 use App\Interfaces\repositories\iaccountsettingInterface;
 use App\Interfaces\repositories\iaccounttypeInterface;
+use App\Interfaces\repositories\iadminstoresrequisitionapprovalInterface;
 use App\Interfaces\repositories\iauthInterface;
 use App\Interfaces\repositories\ibankaccountInterface;
 use App\Interfaces\repositories\ibankInterface;
@@ -58,6 +62,7 @@ use App\Interfaces\repositories\iepaymentInterface;
 use App\Interfaces\repositories\iexchangerateInterface;
 use App\Interfaces\repositories\ihodstoresrequisitionapprovalInterface;
 use App\Interfaces\repositories\iinventoryitemInterface;
+use App\Interfaces\repositories\iissuerstoresrequisitionapprovalInterface;
 use App\Interfaces\repositories\ileaverequestapprovalInterface;
 use App\Interfaces\repositories\ileaverequestInterface;
 use App\Interfaces\repositories\ileavestatementInterface;
@@ -68,6 +73,7 @@ use App\Interfaces\repositories\ionlinepaymentInterface;
 use App\Interfaces\repositories\ipaynowintegrationsInterface;
 use App\Interfaces\repositories\ipermissionInterface;
 use App\Interfaces\repositories\ipurchaseerequisitionInterface;
+use App\Interfaces\repositories\ireceiverstoresrequisitionapprovalInterface;
 use App\Interfaces\repositories\irevenuepostingInterface;
 use App\Interfaces\repositories\iroleRepository;
 use App\Interfaces\repositories\istoresrequisitionInterface;
@@ -81,6 +87,7 @@ use App\Interfaces\repositories\iuserInterface;
 use App\Interfaces\repositories\iwallettopupInterface;
 use App\Interfaces\repositories\iworkflowInterface;
 use App\Interfaces\repositories\iworkplanInterface;
+use App\Interfaces\repositories\iworkshopInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryProvider extends ServiceProvider
@@ -135,7 +142,14 @@ class RepositoryProvider extends ServiceProvider
         $this->app->bind(ileaverequestInterface::class, _leaverequestRepository::class);
         $this->app->bind(ileaverequestapprovalInterface::class, _leaverequestapprovalRepository::class);
         $this->app->bind(istoresrequisitionInterface::class, _storesrequisitionRepository::class);
+        $this->app->bind(ihodstoresrequisitionapprovalInterface::class, _hodstoresrequisitionapprovalRepository::class);
+        $this->app->bind(iissuerstoresrequisitionapprovalInterface::class, _issuerstoresrequisitionapprovalRepository::class);
+        $this->app->bind(ireceiverstoresrequisitionapprovalInterface::class, _receiverstoresrequisitionapprovalRepository::class);
+        $this->app->bind(iadminstoresrequisitionapprovalInterface::class, _adminstoresrequisitionapprovalRepository::class);
         $this->app->bind(icalendarInterface::class, _calenderRepository::class);
+
      //   $this->app->bind(ihodstoresrequisitionapprovalInterface::class, _hodstoresrequisitionapprovalRepository::class);
+        $this->app->bind(iworkshopInterface::class, _workshopRepository::class);
+
     }
 }

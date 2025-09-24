@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class LeaverequestSubmitted extends Notification
+class LeaverequestSubmitted extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -25,9 +25,6 @@ class LeaverequestSubmitted extends Notification
         $this->leavetyperepo=$leavetyperepo;
         $this->leaverequestapprovalrepo=$leaverequestapprovalrepo;
         $this->leaverequestuuid=$this->leaverequest->leaverequestuuid;
-        $approvalrecord=$leaverequestapprovalrepo->getleaverequestapproval($this->leaverequestuuid);
-        $this->approvalrecordid=$approvalrecord->leaverequest_uuid;
-        $this->approverid=$approvalrecord->user_id;
     }
  
     /**
@@ -40,24 +37,29 @@ class LeaverequestSubmitted extends Notification
 
     /**
      * Get the mail representation of the notification.
-     */
+     */ 
     public function toMail($notifiable): MailMessage
     {
-        //approval url
-        $finalizationurl=url('/admin/'.$this->approvalrecordid.'/'.$this->leaverequestuuid.'/'.$this->approverid);
         $leavetype=$this->leavetyperepo->getleavetype($this->leaverequest->leavetype_id);
+        $leaveapprovalitemuuid=$this->leaverequestuuid;
+        $leaveapproverid=$this->leaverequestapprovalrepo->getleaverequestapproval($this->leaverequestuuid)->user_id;
+        $storesapprovalitemuuid='N';
+        $storesapproverid='N';
+        $status='N';
+        $finalizationurl=url('approval/'.$leaveapprovalitemuuid.'/'.$leaveapproverid.'/'.$storesapprovalitemuuid.'/'.$storesapproverid.'/'.$status);
+
         return (new MailMessage)
             ->success()
             ->greeting('Good day from PRAZ')
             ->subject('RE: LEAVE REQUEST SUBMISSION')
             ->line('')
-            ->line('A new '.$leavetype->name.' leave request has been submitted by '.$this->leaverequest->user->firstname.' '.$this->leaverequest->user->surname)
+            ->line('A new '.$leavetype->name.' leave request has been submitted by '.$this->leaverequest->user->name.' '.$this->leaverequest->user->surname)
             ->line('')
             ->action('Make decision', $finalizationurl)
-            ->line('Thank you for using our application, we are here to serve!')
             ->line('')
-            ->line('Regards')
-            ->line('PRAZ (ICT)');
+            ->line('REF #:'.$this->leaverequest->leaverequestuuid)
+            ->line('Thank you for using our application, we are here to serve!')
+            ->line('');
     }
 
     /**
