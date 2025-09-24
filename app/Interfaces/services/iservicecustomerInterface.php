@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\services;
 
-interface icustomerInterface
+interface iservicecustomerInterface
 {
     public function getall();
     public function getcustomerbyregnumber($regnumber);

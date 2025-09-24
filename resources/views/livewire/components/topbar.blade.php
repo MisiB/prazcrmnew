@@ -9,7 +9,7 @@
             <label for="main-drawer" class="lg:hidden me-3">
                 <x-icon name="o-bars-3" class="cursor-pointer" />
             </label>
-          
+            <livewire:admin.issues.newticket icon="o-ticket" />   
             <x-button  icon="o-bell"  class="btn-ghost btn-sm indicator" responsive>
                 <span class="indicator-item badge badge-xs badge-error">5</span>
             </x-button>
@@ -20,10 +20,7 @@
                 <x-menu-item title="Custmers"   
                   icon="o-user-group" 
                 link="{{ route('admin.customers.showlist') }}"/>             
-                <x-menu-separator />
-                <x-menu-item title="New Ticket"   
-                  icon="o-ticket" 
-                link="{{ route('admin.customers.showlist') }}"/>             
+                <x-menu-separator />            
                 <x-menu-separator />
              
             </x-dropdown>

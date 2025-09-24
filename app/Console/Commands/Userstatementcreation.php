@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Interfaces\ileavestatementInterface;
-use App\Interfaces\ileavetypeInterface;
-use App\Interfaces\iuserInterface;
+use App\Interfaces\repositories\ileavestatementInterface;
+use App\Interfaces\repositories\ileavetypeInterface;
+use App\Interfaces\repositories\iuserInterface;
 use App\Models\Leavetype;
 use App\Models\User;
 use Carbon\Carbon;
@@ -64,5 +64,7 @@ class Userstatementcreation extends Command
             
             });
         });
+        $this->info('User leave statements created successfully.');
+        return 0;
     }
 }

@@ -20,12 +20,12 @@ class _customerRepository implements icustomerInterface
     {
         return $this->model->get();
     }
-    public function getCustomerByRegnumber($regnumber)
+    public function getcustomerbyregnumber($regnumber)
     {
         return $this->model->where("regnumber",$regnumber)->first();
     }
 
-    public function getCustomerById($id)
+    public function getcustomerbyid($id)
     {
         return $this->model->with(['onlinepayments','tenders','banktransactions','epayments','suspenses'])->find($id);
     }

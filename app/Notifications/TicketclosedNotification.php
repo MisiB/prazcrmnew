@@ -18,7 +18,7 @@ class TicketclosedNotification extends Notification implements ShouldQueue
     public $surname;
     public $ticketnumber;
     public $comment;
-    public function __construct($name,$surname,$ticketnumber,$comment)
+    public function __construct($name,$surname,$ticketnumber,$comment=null)
     {
         $this->name=$name;
         $this->surname=$surname;
@@ -45,7 +45,8 @@ class TicketclosedNotification extends Notification implements ShouldQueue
         ->subject('PRAZ Issue ticket Resolved and Closed')
         ->greeting('Good day'.$this->name." ".$this->surname)
         ->line("Your Issue with  Ticket number :  ".$this->ticketnumber." has been resolved and closed with the following comment")
-       ->line('Comment: '.$this->comment)
+       ->line('Comment: '.$this->comment??'No comment provided')
+        ->line('You can view the details of your ticket on the PRAZ CRM portal')
        ->line('If the issue is not resolved please contact us on the follow email egpsupport@praz.org.zw');
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin\Configuration;
 
-use App\Interfaces\repositories\ileavetypeInterface;
+use App\Interfaces\ileavetypeInterface;
 use Livewire\Component;
 use Mary\Traits\Toast;
 

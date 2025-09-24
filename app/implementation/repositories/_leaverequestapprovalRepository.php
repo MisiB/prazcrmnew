@@ -16,11 +16,11 @@ class _leaverequestapprovalRepository implements ileaverequestapprovalInterface
     {
         return $this->model->all();
     }
-    public function getleaverequestapprovalsByUserId($userid)
+    public function getleaverequestapprovalsbyuserid($userid)
     {
         return $this->model->where('user_id', $userid);
     }
-    public function getleaverequestapprovalsByStatus($status)
+    public function getleaverequestapprovalsbystatus($status)
     {
         return $this->model->where('action', $status);
     }
@@ -43,11 +43,11 @@ class _leaverequestapprovalRepository implements ileaverequestapprovalInterface
             return ['status' => "error", 'message' => $e->getMessage()];
         }
     }
-    public function updateleaverequestapproval($id, $data)
+    public function updateleaverequestapproval($uuid, $data)
     {
         try
         {
-            $leaveapproval = $this->getleaverequestapproval($id);
+            $leaveapproval = $this->getleaverequestapproval($uuid);
             if (!$leaveapproval) {
                 return ["status" => "error", "message" => "Leave approval not found."];
             }

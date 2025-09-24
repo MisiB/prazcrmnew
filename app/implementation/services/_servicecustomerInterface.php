@@ -1,11 +1,12 @@
 <?php
-
+ 
 namespace App\implementation\services;
 
 use App\Interfaces\repositories\icustomerInterface;
-use App\Interfaces\services\icustomerInterface as servicecustomerInterface;
+use App\Interfaces\services\iservicecustomerInterface;
+use Illuminate\Support\Collection;
 
-class _customerService implements servicecustomerInterface
+class _servicecustomerInterface implements iservicecustomerInterface
 {
     protected $customerrepo;
     public function __construct(icustomerInterface $customerrepo)
@@ -16,20 +17,7 @@ class _customerService implements servicecustomerInterface
         return $this->customerrepo->getall();
     }
     public function getcustomerbyregnumber($regnumber){
-     $customer = $this->customerrepo->getcustomerbyregnumber($regnumber);
-     $array = [  "id"=>$customer->id,
-        "regnumber"=>$customer->regnumber,
-        "name"=>$customer->name,
-        "type"=>$customer->type,
-        "bankTransaction"=>null,
-        "invoice"=>null,
-        "suspense"=>null,
-        "onlinepayments"=> null,
-        "baddebts"=>null,
-        "dateCreated"=>"2019-12-01T00:00:00+00:00",
-        "dateUpdated"=>"2021-07-09T00:00:00+00:00",
-        "dateDeleted"=>null];
-        return $array;
+        return $this->customerrepo->getcustomerbyregnumber($regnumber); 
     }
     public function createcustomer($data){
         $check_customer_name = $this->customerrepo->searchname($data['name'],$data['type']);

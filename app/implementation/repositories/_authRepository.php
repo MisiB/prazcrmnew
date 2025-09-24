@@ -5,6 +5,7 @@ namespace App\implementation\repositories;
 use App\Enums\ApiResponse;
 use App\Interfaces\repositories\iauthInterface;
 use App\Models\Accounttype;
+use App\Models\AccounttypeUser;
 use App\Models\Resetpassword;
 use App\Models\User;
 use App\Models\Userapprovalcode;
@@ -25,13 +26,16 @@ class _authRepository implements iauthInterface
     protected $user;
     protected $userapprovalcode;
     protected $accounttype;
+    protected $accounttypeUser;
     protected $resetpassword;
-    public function __construct(Auth $auth, User $user, Userapprovalcode $userapprovalcode, Accounttype $accounttype, Resetpassword $resetpassword)
+    public function __construct(Auth $auth, User $user, Userapprovalcode $userapprovalcode, Accounttype $accounttype, AccounttypeUser $accounttypeUser, Resetpassword $resetpassword)
     {
         $this->auth = $auth;
         $this->user = $user;
+
         $this->userapprovalcode = $userapprovalcode;
         $this->accounttype = $accounttype;
+        $this->accounttypeUser = $accounttypeUser;
         $this->resetpassword = $resetpassword;
     }
 
@@ -46,7 +50,7 @@ class _authRepository implements iauthInterface
      public function Logout(){
        Auth::logout();
      }
-     public function register(array $credentials){
+    public function register(array $credentials){
         try {
     
         $user = $this->user->create([

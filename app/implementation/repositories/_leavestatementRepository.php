@@ -18,11 +18,11 @@ class _leavestatementRepository implements ileavestatementInterface
     {
         return $this->model->with('leavetype','user')->get();
     }
-    public function getleavestatementByLeaveType($leavetypeid)
+    public function getleavestatementbyleavetype($leavetypeid)
     {
         return $this->model->with('leavetype','user')->where('leavetype_id', $leavetypeid)->get();
     }
-    public function getleavestatementByUser($userid)
+    public function getleavestatementbyuser($userid)
     {
         return $this->model->where('user_id', $userid)->get();
     }
@@ -74,11 +74,11 @@ class _leavestatementRepository implements ileavestatementInterface
 
         }
     }
-    public function getleavestatementByUserAndLeaveType($userid, $leavetypeid)
+    public function getleavestatementbyuserandleavetype($userid, $leavetypeid)
     {
         return $this->model->where('user_id', $userid)->where('leavetype_id', $leavetypeid)->first();
     }
-    public function getleavestatementByUserIdAndLeaveName($userid, $leavename)
+    public function getleavestatementbyuseridandleavename($userid, $leavename)
     {
         return $this->model->with('leavetype','user')->whereHas('user',function($user) use (&$userid)
         {

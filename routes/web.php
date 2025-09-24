@@ -73,6 +73,15 @@ Route::middleware('auth')->group(function () {
     Volt::route('/trackers/performancetracker', 'admin.trackers.performancetracker')->name('admin.trackers.performancetracker');
     Volt::route('/trackers/budgettracker', 'admin.trackers.budgettracker')->name('admin.trackers.budgettracker');
     Volt::route('/calendar', 'admin.weekday-calendar')->name('admin.calendar');
+    //Issue-log Module Routes
+    Volt::route('/issues/configurations', 'admin.issues.configuration')->name('admin.issues.configurations');
+    Volt::route('/issues/dashboard', 'admin.issues.issuelogdashboard')->name('admin.issues.issuelogdashboard');
+    Volt::route('/issues/log/{id}', 'admin.issues.viewissuelog')->name('admin.issues.log');
+    Volt::route('/issues/assignedissues', 'admin.issues.assignedissues')->name('admin.issues.assignedissues');
+    Volt::route('/issues/assignedissue/{id:string}', 'admin.issues.viewassignedissue')->name('admin.issues.viewassignedissue');
+    Volt::route('/issues/newticket', 'admin.issues.newticket')->name('admin.issues.newticket');
+    Volt::route('/issues/logs', 'admin.issues.issuelogs')->name('admin.issues.logs');
+
 });
 //Email Approval Flows
 Route::get('/approval/{leaveapprovalitemuuid}/{leaveapproverid}/{storesapprovalitemuuid}/{storesapproverid}/{status}', function($leaveapprovalitemuuid,$leaveapproverid,$storesapprovalitemuuid,$storesapproverid,$status){

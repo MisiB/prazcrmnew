@@ -16,7 +16,7 @@ class _leavetypeRepository implements ileavetypeInterface
     {
         return $this->model->all();
     }
-    public function getLeavetypeByName($name)
+    public function getleavetypebyname($name)
     {
         return $this->model->where('name', $name)->first();
     }

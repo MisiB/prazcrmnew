@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Interfaces\repositories\ileaverequestapprovalInterface;
-use App\Interfaces\repositories\ileaverequestInterface;
-use App\Interfaces\repositories\ileavetypeInterface;
-use App\Interfaces\repositories\iuserInterface;
+
+use App\Interfaces\services\ileaverequestService;
 use App\Notifications\LeaverequestSubmitted;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -24,21 +22,36 @@ class Updateactinghod extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'This command updates Acting HOD role incase the actual HOD returns from leave, hence stopping the notifications to the Acting HOD';
     protected $hodrole='Acting HOD';
     /**
      * Execute the console command. For the pending requests
      */
-    public function handle(ileaverequestInterface $leaverequestrepo, iuserInterface $userrepo, ileavetypeInterface $leavetyperepo, ileaverequestapprovalInterface $leaverequestapprovalrepo)
+    public function handle(ileaverequestService $leaverequestService)
     {
-        $leaverequestrepo->getleaverequestByStatus('P')->each(function($requestrecord) use($userrepo, $leavetyperepo, $leaverequestapprovalrepo, &$hodrole){
-            $currentDate=Carbon::now()->format('Y-m-d');
-            if($currentDate === $requestrecord->returndate && $requestrecord->actinghod_id != null){
-                $acting_hod=$userrepo->getuser($requestrecord->actinghod_id);
-                $acting_hod->removeRole($hodrole);//'Acting HOD' Role
-                $hod=$userrepo->getuser($requestrecord->user_id);
-                //$hod->notify(new LeaverequestSubmitted($requestrecord, $leavetyperepo, $leaverequestapprovalrepo ));
+        $leaverequestService->getleaverequestbystatus('A')->each(function($requestrecord) use(&$leaverequestService, &$hodrole){
+            if($requestrecord->actinghod_id!=null)
+            {
+                $currentdate=Carbon::now();//$currentdate=Carbon::parse("2025-10-06");
+                $returndate=Carbon::parse($requestrecord->returndate)->startOfDay();
+                if( $currentdate->equalTo($returndate)|| $currentdate->greaterThan($returndate) ){
+                    $acting_hod=$leaverequestService->getuser($requestrecord->actinghod_id);
+                    $acting_hod->removeRole($this->hodrole);//'Acting HOD' Role
+                    
+                    $hodapprovalrecord=$leaverequestService->getleaverequestapproval($requestrecord->leaverequestuuid);
+                    //Notify actual HOD Of the pending leave tasks left behind
+                    $leaverequestService->getleaverequestbystatus('P')->each(function($userrequestrecord) use(&$leaverequestService,&$hodapprovalrecord){
+
+                        $userapprovalrecord=$leaverequestService->getleaverequestapproval($userrequestrecord->leaverequestuuid);
+                        if($userapprovalrecord->user_id===$hodapprovalrecord->user_id)
+                        {
+                            $hoduser=$leaverequestService->getuser($userapprovalrecord->user_id);
+                            $hoduser->notify(new LeaverequestSubmitted($leaverequestService, $userapprovalrecord->leaverequest_uuid)); 
+                        }
+                    });
+                    $this->info("Acting HOD Role Updated Successfully");
+                }
             }
         });
-    }
+}
 }

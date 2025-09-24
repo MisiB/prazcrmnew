@@ -43,7 +43,12 @@ use App\implementation\repositories\_wallettopupRepository;
 use App\implementation\repositories\_workflowRepository;
 use App\implementation\repositories\_workplanRepository;
 use App\implementation\repositories\_calenderRepository;
+use App\implementation\repositories\_issuecommentRepository;
+use App\implementation\repositories\_issuegroupRepository;
+use App\implementation\repositories\_issuelogRepository;
 use App\implementation\repositories\_issuerstoresrequisitionapprovalRepository;
+use App\implementation\repositories\_issuetaskRepository;
+use App\implementation\repositories\_issuetypeRepository;
 use App\Interfaces\repositories\iaccountsettingInterface;
 use App\Interfaces\repositories\iaccounttypeInterface;
 use App\Interfaces\repositories\iadminstoresrequisitionapprovalInterface;
@@ -61,7 +66,12 @@ use App\Interfaces\repositories\iepaymentInterface;
 use App\Interfaces\repositories\iexchangerateInterface;
 use App\Interfaces\repositories\ihodstoresrequisitionapprovalInterface;
 use App\Interfaces\repositories\iinventoryitemInterface;
+use App\Interfaces\repositories\iissuecommentInterface;
+use App\Interfaces\repositories\iissuegroupInterface;
+use App\Interfaces\repositories\iissuelogInterface;
 use App\Interfaces\repositories\iissuerstoresrequisitionapprovalInterface;
+use App\Interfaces\repositories\iissuetaskInterface;
+use App\Interfaces\repositories\iissuetypeInterface;
 use App\Interfaces\repositories\ileaverequestapprovalInterface;
 use App\Interfaces\repositories\ileaverequestInterface;
 use App\Interfaces\repositories\ileavestatementInterface;
@@ -145,5 +155,11 @@ class RepositoryProvider extends ServiceProvider
         $this->app->bind(ireceiverstoresrequisitionapprovalInterface::class, _receiverstoresrequisitionapprovalRepository::class);
         $this->app->bind(iadminstoresrequisitionapprovalInterface::class, _adminstoresrequisitionapprovalRepository::class);
         $this->app->bind(icalendarInterface::class, _calenderRepository::class);
+        $this->app->bind(iissuecommentInterface::class, _issuecommentRepository::class);
+        $this->app->bind(iissuegroupInterface::class, _issuegroupRepository::class);
+        $this->app->bind(iissuelogInterface::class, _issuelogRepository::class);
+        $this->app->bind(iissuetaskInterface::class, _issuetaskRepository::class);
+        $this->app->bind(iissuetypeInterface::class, _issuetypeRepository::class);
+
     }
 }

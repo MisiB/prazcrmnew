@@ -9,12 +9,25 @@
             <x-button label="Import leave statement updates" responsive icon="o-plus" class="btn-outline" @click="$wire.importmodal = true" />
         </x-slot:menu>
 
-        <x-table :headers="$headers" :rows="$leavestatements">
-            @scope('cell_days',$leavestatement)
-            <span>
-               {{ (int)$leavestatement->leavetype->ceiling-(int)$leavestatement->days}}
-            </span>
-            @endscope            
+        <x-table :headers="$headers" :rows="$leavestatements" show-empty-text empty-text="No leave statements found.">
+            @scope('cell_vacationleave',$leavestatement)
+                <span>{{$leavestatement['leavetypes']['Vacation']??'-'}}</span>
+            @endscope       
+            @scope('cell_annualleave',$leavestatement)
+                <span>{{$leavestatement['leavetypes']['Annual']??'-'}}</span>
+            @endscope 
+            @scope('cell_studyleave',$leavestatement)
+                <span>{{$leavestatement['leavetypes']['Study']??'-'}}</span>
+            @endscope 
+            @scope('cell_sickleave',$leavestatement)
+                <span>{{$leavestatement['leavetypes']['Sick']??'-'}}</span>
+            @endscope             
+            @scope('cell_maternityleave',$leavestatement)
+                <span>{{$leavestatement['leavetypes']['Maternity']??'-'}}</span>
+            @endscope             
+            @scope('cell_compassionateleave',$leavestatement)
+                <span>{{$leavestatement['leavetypes']['Compassionate']??'-'}}</span>
+            @endscope             
             <x-slot:empty>
                 <x-alert class="alert-error" title="No leave statement found." />
             </x-slot:empty>
