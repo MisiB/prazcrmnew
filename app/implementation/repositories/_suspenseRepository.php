@@ -104,6 +104,9 @@ class _suspenseRepository implements isuspenseInterface
         
         return $array;
     }
+    public function getpendingsuspense($regnumber,$accounttype,$currency){
+        return $this->model->with('suspenseutilizations')->where('status', 'PENDING')->where('sourcetype','!=','bbf')->where('type', $accounttype)->where('currency', $currency)->get();
+    }
     public function createmonthlysuspensewallets($month,$year){
       $data = $this->model->with('suspenseutilizations','customer')->where('status', 'PENDING')->where('sourcetype','!=','bbf')->get();
       if(count($data)>0){
@@ -266,5 +269,18 @@ class _suspenseRepository implements isuspenseInterface
       }
     }
    
+  }
+  public function createSuspenseutilization($suspense_id,$invoice_id,$amount,$receiptnumber){
+    try{
+    $suspenseutilization = $this->suspenseutilizations->firstOrCreate(["suspense_id"=>$suspense_id,"receiptnumber"=>$receiptnumber],[
+      "amount" => $amount,
+      "suspense_id"=>$suspense_id,
+      "invoice_id"=>$invoice_id,
+      "receiptnumber" => $receiptnumber,
+    ]);
+    return ['status'=>'success','message'=>'Suspense utilization created successfully','data'=>$suspenseutilization];
+    }catch(\Exception $e){
+      return ['status'=>'error','message'=>$e->getMessage()];
+    }
   }
 }

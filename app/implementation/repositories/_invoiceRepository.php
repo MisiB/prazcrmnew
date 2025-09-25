@@ -50,11 +50,11 @@ class _invoiceRepository implements invoiceInterface
     }
     public function getInvoiceDetails($invoiceId)
     {
-        return $this->invoice->with('inventoryitem','currency','customer')->find($invoiceId);
+        return $this->invoice->with('inventoryitem','currency','customer','receipts')->find($invoiceId);
     }
     public function getInvoiceByInvoiceNumber($invoiceNumber)
     {
-        return $this->invoice->with('inventoryitem','currency','customer')->where('invoicenumber', $invoiceNumber)->first();
+        return $this->invoice->with('inventoryitem','currency','customer','receipts')->where('invoicenumber', $invoiceNumber)->first();
     }
     public function getcomparisonreport($firstfromDate, $firsttoDate,$secondfromDate, $secondtoDate,$status,array $inventoryItems,array $currencyItems)
     {
@@ -155,6 +155,18 @@ class _invoiceRepository implements invoiceInterface
             return ['status'=>'ERROR','message'=>$e->getMessage(),'data'=>null];
         }
     }
+    public function markInvoiceAsPaid($invoiceNumber)
+    {
+        $invoice = $this->invoice->where('invoicenumber',$invoiceNumber)->first();
+        if(!$invoice){
+            return ['status'=>'ERROR','message'=>'Invoice not found','data'=>null];
+        }
+    
+        $invoice->status = "PAID";
+        $invoice->save();
+        return ['status'=>'SUCCESS','message'=>'Invoice successfully marked as paid','data'=>$invoice];
+    }
+
 
     public function updateInvoice($data)
     {

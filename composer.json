@@ -19,6 +19,7 @@
         "openai-php/client": "^0.13.0",
         "openai-php/laravel": "^0.13.0",
         "paynow/php-sdk": "^1.0",
+        "prism-php/prism": "*",
         "rappasoft/laravel-livewire-tables": "^3.7",
         "robsontenorio/mary": "^2.2",
         "spatie/laravel-backup": "^9.3",

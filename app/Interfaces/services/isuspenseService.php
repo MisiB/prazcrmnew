@@ -13,4 +13,6 @@ interface isuspenseService
      public function getsuspensestatement($customer_id);
      public function getwalletbalance($regnumber,$accounttype,$currency);
      public function deductwallet($regnumber,$invoice_id,$accounttype,$currency,$amount,$receiptnumber);
+
+     public function suspenseutilization($data);
 }

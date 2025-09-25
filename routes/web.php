@@ -76,7 +76,6 @@ Route::middleware('auth')->group(function () {
     Volt::route('/workshopindex', 'admin.workshops.workshopindex')->name('admin.workshop.index');
     Volt::route('/workshopindex/{id}', 'admin.workshops.workshopview')->name('admin.workshop.view');
 });
-});
 //Email Approval Flows
 Route::get('/approval/{leaveapprovalitemuuid}/{leaveapproverid}/{storesapprovalitemuuid}/{storesapproverid}/{status}', function($leaveapprovalitemuuid,$leaveapproverid,$storesapprovalitemuuid,$storesapproverid,$status){
     $msgraph=new MsGraph();

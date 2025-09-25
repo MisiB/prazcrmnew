@@ -24,6 +24,8 @@ Route::post("account/Verification", [CustomerController::class, "verifycustomer"
 Route::post("account", [CustomerController::class, "createcustomer"]);
 Route::put("account", [CustomerController::class, "updatecustomer"]);
 Route::get("InventoryItem", [InventoryitemController::class, "getinventories"]);
+Route::post("WalletBalanceUtilization",[invoiceController::class,"settleinvoice"]);
+
 Route::get("Invoice/{invoicenumber}", [invoiceController::class, "show"]);
 Route::post("Invoice/Create", [invoiceController::class, "store"]);
 Route::get("ExchangeRate/GetLatest/{currency_id?}", [ExchangerateController::class, "getlatest"]);

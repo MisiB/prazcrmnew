@@ -20,4 +20,5 @@ class WalletController extends Controller
     public function getwalletbalance(GetWalletByTypeRequest $request){
         return $this->suspenseService->getwalletbalance($request->regnumber,$request->type,$request->currency);
     }
+ 
 }

@@ -15,18 +15,28 @@ use Illuminate\Support\Facades\Storage;
 use App\Interfaces\repositories\icurrencyInterface;
 use App\Interfaces\repositories\iworkshopInterface;
 use App\Interfaces\repositories\iexchangerateInterface;
+use App\Interfaces\repositories\icustomerInterface;
 
 class _publicworkshopService
 {
     protected $workshopRepo;
     protected $currencyRepo;
     protected $exchangeRateRepo;
+    protected $workshop;
+    protected $customerrepo;
+    protected $workshoporder;
 
     public function __construct(
+        Workshop $workshop,
+        Workshoporder $workshoporder,
+        icustomerInterface $customerrepo,
         iworkshopInterface $workshopRepo,
         icurrencyInterface $currencyRepo,
         iexchangerateInterface $exchangeRateRepo
     ) {
+        $this->workshop = $workshop;
+        $this->workshoporder = $workshoporder;
+        $this->customerrepo = $customerrepo;
         $this->workshopRepo = $workshopRepo;
         $this->currencyRepo = $currencyRepo;
         $this->exchangeRateRepo = $exchangeRateRepo;
@@ -38,7 +48,7 @@ class _publicworkshopService
     public function getWorkshopDetails($id)
     {
         try {
-            $workshop = Workshop::with('currency')->findOrFail($id);
+            $workshop = $this->workshop->with('currency')->findOrFail($id);
             return [
                 'status' => 'success',
                 'data' => $workshop
@@ -57,7 +67,7 @@ class _publicworkshopService
     public function getCurrencies()
     {
         try {
-            return Currency::where('status', 'Active')->get();
+            return $this->currencyRepo->getcurrencies()->where('status', 'Active');
         } catch (\Exception $e) {
             return [
                 'status' => 'error',
@@ -72,9 +82,9 @@ class _publicworkshopService
     public function getOrderStats($workshopId)
     {
         try {
-            $workshop = Workshop::findOrFail($workshopId);
-            $totalOrders = $workshop->orders()->count();
-            $totalDelegates = $workshop->orders()->where('status', 'PAID')->sum('delegates');
+            $workshop = $this->workshop->findOrFail($workshopId);
+            $totalOrders = $this->workshop->orders()->count();
+            $totalDelegates = $this->workshop->orders()->where('status', 'PAID')->sum('delegates');
             $remainingSeats = max(0, $workshop->limit - $totalDelegates);
 
             return [
@@ -99,7 +109,7 @@ class _publicworkshopService
     public function searchCustomer($prnumber)
     {
         try {
-            $customer = Customer::where('regnumber', $prnumber)->first();
+            $customer = $this->customerrepo->getCustomerByRegnumber($prnumber);
             if (!$customer) {
                 return [
                     'status' => 'error',
@@ -125,7 +135,7 @@ class _publicworkshopService
     public function getWorkshopOrder($workshopId, $customerId)
     {
         try {
-            $workshopOrder = Workshoporder::with('currency')
+            $workshopOrder = $this->workshoporder->with('currency')
                 ->where('workshop_id', $workshopId)
                 ->where('customer_id', $customerId)
                 ->first();
@@ -148,8 +158,8 @@ class _publicworkshopService
     public function createOrUpdateOrder($workshopId, $customerId, array $data)
     {
         try {
-            $workshop = Workshop::findOrFail($workshopId);
-            $customer = Customer::findOrFail($customerId);
+            $workshop = $this->workshop->findOrFail($workshopId);
+            $customer = $this->customerrepo->getCustomerById($customerId);
 
             // Check remaining seats
             $orderStats = $this->getOrderStats($workshopId);
@@ -164,7 +174,7 @@ class _publicworkshopService
                 ];
             }
 
-            $existingOrder = Workshoporder::where('workshop_id', $workshopId)
+            $existingOrder = $this->workshoporder->where('workshop_id', $workshopId)
                 ->where('customer_id', $customer->id)
                 ->first();
 
@@ -186,7 +196,7 @@ class _publicworkshopService
                 ];
             } else {
                 // Create new order
-                $ordernumber = 'Order-' . date('Y') . '-' . str_pad(Workshoporder::count() + 1, 5, '0', STR_PAD_LEFT);
+                $ordernumber = 'Order-' . date('Y') . '-' . str_pad($this->workshoporder->count() + 1, 5, '0', STR_PAD_LEFT);
 
                 $order = Workshoporder::create([
                     'ordernumber' => $ordernumber,
@@ -227,7 +237,7 @@ class _publicworkshopService
                 return new Collection();
             }
 
-            $query = Exchangerate::where('secondary_currency_id', $currencyId);
+            $query = $this->exchangeRateRepo->getexchangeratesbyprimarycurrency($currencyId);
             
             if ($currencyId != 1 && $workshopCreatedAt) {
                 $query->whereDate('created_at', '>=', $workshopCreatedAt);

@@ -11,6 +11,7 @@ interface invoiceInterface
     public function getInvoicebyCustomer($customerId);
     public function getquarterlyreport($year,$status,array $inventoryItems,array $currencyItems);
     public function getInvoiceByInvoiceNumber($invoiceNumber);
+    public function markInvoiceAsPaid($invoiceNumber);
     public function createInvoice($data);
     public function updateInvoice($data);
     public function deleteInvoice($invoicenumber);
