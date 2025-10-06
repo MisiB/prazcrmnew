@@ -4,7 +4,7 @@ namespace App\Interfaces\repositories;
 
 interface isuspenseInterface
 {
-     public function getpendingsuspensewallets();
+     public function getpendingsuspensewallets($limit = 1000, $offset = 0);
      public function getpendingsuspense($regnumber,$accounttype,$currency);
      public function create(array $data);
      public function createmonthlysuspensewallets($month,$year);

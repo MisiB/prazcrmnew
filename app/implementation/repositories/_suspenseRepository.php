@@ -51,7 +51,7 @@ class _suspenseRepository implements isuspenseInterface
             return ['status'=>'error','message'=>$e->getMessage()];
         }
     }
-    public function getpendingsuspensewallets(){
+    public function getpendingsuspensewallets($limit = 1000, $offset = 0){
         $query = $this->model
             ->select([
                 'suspenses.id',
@@ -79,7 +79,10 @@ class _suspenseRepository implements isuspenseInterface
                 'suspenses.amount',
                 'customers.name',
                 'customers.regnumber'
-            );
+            )
+            ->orderBy('suspenses.created_at', 'desc')
+        ->limit($limit)
+        ->offset($offset);
 
           
 

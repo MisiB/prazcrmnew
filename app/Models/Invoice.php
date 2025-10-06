@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
+
+    protected function casts(): array
+    {
+        return [
+            'settlement_date' => 'datetime'
+        ];
+    }
+
     public function inventoryitem()
     {
         return $this->belongsTo(Inventoryitem::class,"inventoryitem_id");

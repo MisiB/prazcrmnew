@@ -24,8 +24,8 @@
     <x-modal wire:model="retrievemodal" title="Retrieve Invoices" >
       <x-form wire:submit="getInvoicespaginated">
         <div class="grid grid-cols-3 gap-4">
-        <x-input wire:model="fromdate" label="From Date" type="date" />
-        <x-input wire:model="todate" label="To Date" type="date" />
+        <x-input wire:model="fromdate" label="Settlement From Date" type="date" />
+        <x-input wire:model="todate" label="Settlement To Date" type="date" />
         <x-select wire:model="status" label="Status" :options="$statuslist" placeholder="Select Status" option-label="name" option-value="id" />
        </div>
        <div class="grid  gap-4">

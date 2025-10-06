@@ -18,6 +18,7 @@ class Invoicereport extends Component
     public $fromdate;
     public $todate;
     public $status;
+    public $datetype = 'settlement_date'; // Add this property
     public array $currencyitems=[];
     public array $inventoryitems=[];
     public $retrievemodal=false;
@@ -42,7 +43,7 @@ class Invoicereport extends Component
     public function getInvoicespaginated():LengthAwarePaginator
     {
         if($this->fromdate && $this->todate && $this->status && $this->inventoryitems && $this->currencyitems){
-            $invoices = $this->invoicerepo->getInvoicespaginated($this->fromdate, $this->todate, $this->status, $this->inventoryitems, $this->currencyitems);
+            $invoices = $this->invoicerepo->getInvoicespaginated($this->fromdate, $this->todate, $this->status, $this->inventoryitems, $this->currencyitems, $this->datetype);
         
             return $invoices;
         
@@ -51,7 +52,7 @@ class Invoicereport extends Component
     }
     public function getallinvoices():Collection
     {
-        $invoices = $this->invoicerepo->getInvoices($this->fromdate, $this->todate, $this->status, $this->inventoryitems, $this->currencyitems);
+        $invoices = $this->invoicerepo->getInvoices($this->fromdate, $this->todate, $this->status, $this->inventoryitems, $this->currencyitems, $this->datetype);
         return $invoices;
     }
 

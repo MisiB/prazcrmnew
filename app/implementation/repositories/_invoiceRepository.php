@@ -34,7 +34,7 @@ class _invoiceRepository implements invoiceInterface
     public function getInvoices($fromDate, $toDate,$status,array $inventoryItems,array $currencyItems)
     {
         return $this->invoice->with('inventoryitem','currency','customer','receipts.suspense.onlinepayment','receipts.suspense.banktransaction')
-        ->where('created_at', '>=', $fromDate)->where('created_at', '<=', $toDate)
+        ->where('settlement_date', '>=', $fromDate)->where('settlement_date', '<=', $toDate)
         ->where('status', $status)
         ->whereIn('inventoryitem_id', $inventoryItems)
         ->whereIn('currency_id', $currencyItems)
@@ -43,7 +43,7 @@ class _invoiceRepository implements invoiceInterface
     public function getInvoicespaginated($fromDate, $toDate,$status,array $inventoryItems,array $currencyItems)
     {
         return $this->invoice->with('inventoryitem','currency','customer','receipts')
-        ->where('created_at', '>=', $fromDate)->where('created_at', '<=', $toDate)
+        ->where('settlement_date', '>=', $fromDate)->where('settlement_date', '<=', $toDate)
         ->where('status', $status)
         ->whereIn('inventoryitem_id', $inventoryItems)->whereIn('currency_id', $currencyItems)
         ->paginate(500);
@@ -161,9 +161,16 @@ class _invoiceRepository implements invoiceInterface
         if(!$invoice){
             return ['status'=>'ERROR','message'=>'Invoice not found','data'=>null];
         }
-    
+        if($invoice->status=="PAID"){
+            return ['status'=>'ERROR','message'=>'Invoice already paid','data'=>null];
+        }
+
         $invoice->status = "PAID";
         $invoice->save();
+        
+        // Update settlement date when marking invoice as paid
+        $this->updateInvoiceSettlementDate($invoice->id);
+        
         return ['status'=>'SUCCESS','message'=>'Invoice successfully marked as paid','data'=>$invoice];
     }
 
@@ -234,5 +241,34 @@ class _invoiceRepository implements invoiceInterface
        return ['status'=>'success','message'=>'Invoice successfully settled','data'=>$invoice];
      
     
+    }
+
+    public function updateInvoiceSettlementDate($invoiceId)
+    {
+        try {
+            $invoice = $this->invoice->find($invoiceId);
+            
+            if (!$invoice) {
+                return ['status' => 'ERROR', 'message' => 'Invoice not found'];
+            }
+
+            // Get the latest created_at date from related Suspenseutilization records
+            $latestSuspenseUtilization = $invoice->receipts()
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+            if ($latestSuspenseUtilization) {
+                $settlementDate = $latestSuspenseUtilization->created_at;
+                
+                // Update the settlement_date
+                $invoice->update(['settlement_date' => $settlementDate]);
+                
+                return ['status' => 'SUCCESS', 'message' => 'Settlement date updated successfully'];
+            }
+            
+            return ['status' => 'ERROR', 'message' => 'No Suspenseutilization records found'];
+        } catch (\Exception $e) {
+            return ['status' => 'ERROR', 'message' => 'Failed to update settlement date: ' . $e->getMessage()];
+        }
     }
 }
