@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\implementation\services\_apifilterRepositiory;
 use App\implementation\services\_banktransactionService;
 use App\implementation\services\_calendarService;
 use App\implementation\services\_httpService;
@@ -11,11 +12,13 @@ use App\implementation\services\_invoiceService;
 use App\implementation\services\_palladiumService;
 use App\implementation\services\_paynowService;
 use App\implementation\services\_exchangerateService;
+use App\implementation\services\_issuefilterRepository;
 use App\implementation\services\_issueService;
 use App\implementation\services\_leaverequestService;
 use App\implementation\services\_servicecustomerInterface;
 use App\implementation\services\_storesrequisitionService;
 use App\implementation\services\_suspenseService;
+use App\Interfaces\services\iapifilterService;
 use App\Interfaces\services\ibanktransactionInterface;
 use App\Interfaces\services\ICalendarService;
 use App\Interfaces\services\iexchangerateService;
@@ -23,6 +26,7 @@ use App\Interfaces\services\ihttpInterface;
 use App\Interfaces\services\IImportService;
 use App\Interfaces\services\iinventoryitemService;
 use App\Interfaces\services\iinvoiceService;
+use App\Interfaces\services\iissuefilterService;
 use App\Interfaces\services\iissueService;
 use App\Interfaces\services\ileaverequestService;
 use App\Interfaces\services\ipalladiumInterface;
@@ -61,5 +65,7 @@ class ApiProvider extends ServiceProvider
         $this->app->bind(istoresrequisitionService::class,_storesrequisitionService::class);
         $this->app->bind(iissueService::class,_issueService::class);
         $this->app->bind(ileaverequestService::class,_leaverequestService::class);
+        $this->app->bind(iapifilterService::class,_apifilterRepositiory::class);
+        $this->app->bind(iissuefilterService::class,_issuefilterRepository::class);
     }
 }

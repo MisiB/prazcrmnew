@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 Schedule::command('app:userstatementcreation')->daily();
 Schedule::command('app:statementsrollover')->monthly();
 Schedule::command('app:updateactinghod')->daily();
+Schedule::command('app:setupissuelogapi')->yearly();

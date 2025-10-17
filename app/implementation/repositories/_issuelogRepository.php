@@ -19,7 +19,7 @@ class _issuelogRepository implements iissuelogInterface
 
     public function getall(): Collection
     {
-        return $this->issuelog->with(['issuetype', 'issuegroup', 'comments.user', 'task.user'])->get();
+        return $this->issuelog->with(['issuetype', 'issuegroup', 'comments.user', 'task.user'])->orderBy('created_at', 'desc')->get();
     }
 
     public function findbyid(int $id): ?Issuelog

@@ -16,13 +16,11 @@ interface iissueService
     public function createissuetype(array $data): array;
     public function updateissuetype(int $id, array $data): array;
     public function deleteissuetype(int $id): array;
-
     // Issue Group Management
     public function getallissuegroups(): Collection;
     public function createissuegroup(array $data): array;
     public function updateissuegroup(int $id, array $data): array;
     public function deleteissuegroup(int $id): array;
-    
     // Issue Log Management
     public function getallissuelogs(): Collection;
     public function getissuelogspaginated(int $perPage = 15): LengthAwarePaginator;
@@ -36,14 +34,15 @@ interface iissueService
     public function getissuelogsbyassignee(string $userId): Collection;
     public function getissuelogsbydaterange(string $from, string $to): Collection;
     public function getdashboarddata(array $filters = []): array;
-
     // Issue Comments
     public function getcommentsbyissuelog(int $issueLogId): Collection;
     public function addcomment(int $issueLogId, array $data): array;
     public function updatecomment(int $commentId, array $data): array;
     public function deletecomment(int $commentId): array;
-    
     // File Management
     public function uploadfiles(array $files, int $issueLogId): array;
     public function deletefile(int $fileId): array;
+    public function getentityissuegroups();
+    public function getbidderissuegroups();
+    public function gettoken($regnumber,$userlevel);
 }

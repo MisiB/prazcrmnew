@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\issueController;
 use App\Http\Controllers\BanktransactionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ExchangerateController;
@@ -14,19 +15,32 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post("sendPayment",[BanktransactionController::class,"create"])->name("sendPayment");
- Route::get("recallPayment/{referencenumber}",[BanktransactionController::class,"recallpayment"])->name("recallPayment");
- Route::post("BankTransaction/Search",[BanktransactionController::class,"search"])->name("banktransaction.search");
- Route::post("BankTransaction/Claims",[BanktransactionController::class,"claim"])->name("banktransaction.claim");
- Route::get("account",[CustomerController::class,"index"]);
- Route::get("account/getbyregnumber/{regnumber}",[CustomerController::class,"getbyregnumber"]);
- Route::post("account/Verification",[CustomerController::class,"verifycustomer"]);
- Route::post("account",[CustomerController::class,"createcustomer"]);
- Route::put("account",[CustomerController::class,"updatecustomer"]);
- Route::get("InventoryItem",[InventoryitemController::class,"getinventories"]);
- Route::get("Invoice/{invoicenumber}",[invoiceController::class,"show"]);
- Route::post("Invoice/Create",[invoiceController::class,"store"]);
- Route::get("ExchangeRate/GetLatest/{currency_id?}",[ExchangerateController::class,"getlatest"]);
- Route::delete("Invoice/{invoicenumber}",[invoiceController::class,"destroy"]);
- Route::post("Wallet",[WalletController::class,"getwalletbalance"]);
- Route::get("Wallet/{regnumber}",[WalletController::class,"getwallet"]);
+Route::get("recallPayment/{referencenumber}",[BanktransactionController::class,"recallpayment"])->name("recallPayment");
+Route::post("BankTransaction/Search",[BanktransactionController::class,"search"])->name("banktransaction.search");
+Route::post("BankTransaction/Claims",[BanktransactionController::class,"claim"])->name("banktransaction.claim");
+Route::get("account",[CustomerController::class,"index"]);
+Route::get("account/getbyregnumber/{regnumber}",[CustomerController::class,"getbyregnumber"]);
+Route::post("account/Verification",[CustomerController::class,"verifycustomer"]);
+Route::post("account",[CustomerController::class,"createcustomer"]);
+Route::put("account",[CustomerController::class,"updatecustomer"]);
+Route::get("InventoryItem",[InventoryitemController::class,"getinventories"]);
+Route::get("Invoice/{invoicenumber}",[invoiceController::class,"show"]);
+Route::post("Invoice/Create",[invoiceController::class,"store"]);
+Route::get("ExchangeRate/GetLatest/{currency_id?}",[ExchangerateController::class,"getlatest"]);
+Route::delete("Invoice/{invoicenumber}",[invoiceController::class,"destroy"]);
+Route::post("Wallet",[WalletController::class,"getwalletbalance"]);
+Route::get("Wallet/{regnumber}",[WalletController::class,"getwallet"]);
+//api/v1/
+Route::group(['prefix'=>'v1', 'namespace'=>'App\Http\Controllers\Api\V1'], function(){
+    Route::apiResource('issues',issueController::class)->middleware('auth:sanctum');
+    Route::get("issuegroups/getentityissuegroups",[issueController::class,"getentityissuegroups"])->middleware('auth:sanctum');
+    Route::get("issuegroups/getbidderissuegroups",[issueController::class,"getbidderissuegroups"])->middleware('auth:sanctum');
+    Route::get("issuetypes/getentityissuetypes",[issueController::class,"getentityissuetypes"])->middleware('auth:sanctum');
+    Route::get("issuetypes/getbidderissuetypes",[issueController::class,"getbidderissuetypes"])->middleware('auth:sanctum');
+    Route::get("customers/getall",[issueController::class,"getcustomers"]);
+    Route::get("issuelogs/organization",[issueController::class,"getissuesbyorganization"])->middleware('auth:sanctum');
+    Route::post("issuelogs/create",[issueController::class,"createticket"])->middleware('auth:sanctum');
+    Route::get("token/create",[issueController::class,"gettoken"]);
+});
+
 

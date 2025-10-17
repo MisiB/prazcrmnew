@@ -7,6 +7,8 @@ use App\Interfaces\repositories\iissuetypeInterface;
 use App\Interfaces\repositories\iissuegroupInterface;
 use App\Interfaces\repositories\iissuelogInterface;
 use App\Interfaces\repositories\iissuecommentInterface;
+use App\Interfaces\repositories\iuserInterface;
+use App\Interfaces\services\iservicecustomerInterface;
 use App\Models\Issuelog;
 use App\Models\User;
 use App\Notifications\Issuecomment as NotificationsIssuecomment;
@@ -23,17 +25,20 @@ class _issueService implements iissueService
     protected $issuegroupRepository;
     protected $issuelogRepository;
     protected $issuecommentRepository;
+    protected $servicecustomerrepo;
 
     public function __construct(
         iissuetypeInterface $issuetypeRepository,
         iissuegroupInterface $issuegroupRepository,
         iissuelogInterface $issuelogRepository,
-        iissuecommentInterface $issuecommentRepository
+        iissuecommentInterface $issuecommentRepository,
+        iservicecustomerInterface  $servicecustomerrepo,
     ) {
         $this->issuetypeRepository = $issuetypeRepository;
         $this->issuegroupRepository = $issuegroupRepository;
         $this->issuelogRepository = $issuelogRepository;
         $this->issuecommentRepository = $issuecommentRepository;
+        $this->servicecustomerrepo = $servicecustomerrepo;
     }
 
     // Issue Type Management
@@ -307,6 +312,15 @@ class _issueService implements iissueService
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+    public function getentityissuegroups()
+    {
+        return $this->issuegroupRepository->getall()->where('name','Procurement Entity');
+    }
+    public function getbidderissuegroups()
+    {
+        return $this->issuegroupRepository->getall()->where('name','Supplier');
+    
+    }
 
     // Helper Methods
     private function createTaskForIssue(Issuelog $issuelog, int $assignedTo): void
@@ -326,5 +340,32 @@ class _issueService implements iissueService
         if ($user) {
             $user->notify(new TaskAssigned($task, $issuelog));
         }
+    }
+
+    public function gettoken($regnumber,$userlevel)
+    {
+        $authenticatedcustomer=$this->servicecustomerrepo->getcustomerbyregnumber($regnumber);
+        $usertoken=null;
+        if(!$authenticatedcustomer)
+        {
+            $response=['status'=>'error','message'=>'Invalid regnumber', 'token'=>null];
+            return $response;
+        }
+        if(strtolower($userlevel)==="bidder")
+        {
+            $usertoken=$authenticatedcustomer->createToken('bidder-token',['bidder.access','issue.create','issue.read', 'issue.update', 'issue.recall']);
+            
+        }
+        if(strtolower($userlevel)==="entity")
+        {
+            $usertoken=$authenticatedcustomer->createToken('entity-token',['entity.access','issue.create','issue.read', 'issue.update', 'issue.recall']);
+        }
+        if($usertoken==null)
+        {
+            $response=['status'=>'error','message'=>'Invalid user level', 'token'=>null];
+            return $response;
+        }
+        $response=['status'=>'success','message'=>'Token generated successfully', 'token'=>$usertoken->plainTextToken]; 
+        return $response;   
     }
 }
